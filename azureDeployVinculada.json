@@ -1,0 +1,69 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "storageAccountName": {
+            "type": "string",
+            "metadata": {
+                "description": "Cuenta de almacenamiento."
+            }
+        },
+
+        "location": {
+            "type": "string",
+            "metadata": {
+                "description": "specify Location for the resource"
+            }
+        },
+
+        "storageSKU": {
+            "type": "string",
+            "defaultValue": "Standard_LRS",
+            "allowedValues": [
+                "Standard_LRS",
+                "Standard_GRS",
+                "Standard_RAGRS",
+                "Standard_ZRS",
+                "Premium_LRS",
+                "Premium_ZRS",
+                "Standard_GZRS",
+                "Standard_RAGZRS"
+            ],
+            "metadata": {
+                "description": "Specify the storage account name"
+            }
+
+        },
+
+        "resourceTags": {
+            "type": "object",
+            "metadata": {
+                "description": " Specify your tags for the resource"
+            }
+        }
+
+
+    },
+    "functions": [],
+    "variables": {},
+    "resources": [
+        {
+            "name": "[parameters('storageAccountName')]",
+            "type": "Microsoft.Storage/storageAccounts",
+            "apiVersion": "2023-01-01",
+            "tags": "[parameters('resourceTags')]",
+            "location": "[parameters('location')]",
+            "kind": "StorageV2",
+            "sku": {
+                "name": "[parameters('storageSKU')]",
+                "tier": "Standard"
+            }
+        }
+    ],
+    "outputs": {
+        "storageEndpoints": {
+            "type": "object",
+            "value": "[reference(parameters('storageAccountName')).primaryEndpoints]"
+        }
+    }
+}
